@@ -1,0 +1,61 @@
+services:
+  # 1. PostgreSQL Database
+  - type: psql
+    name: mytalent-db
+    plan: free
+    region: singapore
+
+  # 2. Redis Cache
+  - type: redis
+    name: mytalent-redis
+    plan: free
+    region: singapore
+
+  # 3. Python Recommendation Microservice
+  - type: web
+    name: mytalent-recommendation-service
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "pip install -r recommendation-service/requirements.txt"
+    startCommand: "uvicorn recommendation-service.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+  # 4. Node.js Backend API
+  - type: web
+    name: mytalent-backend
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: "cd backend && npm install && npx prisma generate && npm run build"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mytalent-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mytalent-redis
+          property: connectionString
+      - key: ML_SERVICE_URL
+        value: "https://mytalent-recommendation-service.onrender.com"
+      - key: NODE_ENV
+        value: production
+
+  # 5. Next.js Frontend
+  - type: web
+    name: mytalent-frontend
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: "cd frontend && npm install && npm run build"
+    startCommand: "cd frontend && npm start"
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: "https://mytalent-backend.onrender.com/api"
+      - key: NODE_ENV
+        value: production

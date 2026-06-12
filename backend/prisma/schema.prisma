@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(cuid())
+  name            String?
+  mobile          String           @unique
+  email           String?
+  location        String           @default("")
+  education       String           @default("")
+  skills          String[]         @default([])
+  interests       String[]         @default([])
+  resumeUrl       String?
+  createdAt       DateTime         @default(now())
+  recommendations Recommendation[]
+  applications    Application[]
+}
+
+model Internship {
+  id             String           @id @default(cuid())
+  title          String
+  sector         String
+  requiredSkills String[]
+  location       String
+  duration       String
+  stipend        String
+  applyLink      String
+  description    String
+  postedBy       String
+  createdAt      DateTime         @default(now())
+  recommendations Recommendation[]
+  applications   Application[]
+}
+
+model Recommendation {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  internship   Internship @relation(fields: [internshipId], references: [id])
+  internshipId String
+  score        Float
+  generatedAt  DateTime   @default(now())
+}
+
+model Application {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  internship   Internship @relation(fields: [internshipId], references: [id])
+  internshipId String
+  status       String     @default("applied")
+  appliedAt    DateTime   @default(now())
+}
