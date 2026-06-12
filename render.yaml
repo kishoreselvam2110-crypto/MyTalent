@@ -9,6 +9,7 @@ services:
     name: mytalent-redis
     plan: free
     region: singapore
+    ipAllowList: []
 
   # 2. Python Recommendation Microservice
   - type: web
