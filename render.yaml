@@ -1,17 +1,16 @@
-services:
-  # 1. PostgreSQL Database
-  - type: psql
-    name: mytalent-db
+databases:
+  - name: mytalent-db
     plan: free
     region: singapore
 
-  # 2. Redis Cache
+services:
+  # 1. Redis Cache
   - type: redis
     name: mytalent-redis
     plan: free
     region: singapore
 
-  # 3. Python Recommendation Microservice
+  # 2. Python Recommendation Microservice
   - type: web
     name: mytalent-recommendation-service
     env: python
@@ -23,7 +22,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.0
 
-  # 4. Node.js Backend API
+  # 3. Node.js Backend API
   - type: web
     name: mytalent-backend
     env: node
@@ -46,7 +45,7 @@ services:
       - key: NODE_ENV
         value: production
 
-  # 5. Next.js Frontend
+  # 4. Next.js Frontend
   - type: web
     name: mytalent-frontend
     env: node
