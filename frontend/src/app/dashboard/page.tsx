@@ -18,7 +18,6 @@ export default function Dashboard() {
   const router = useRouter();
   const [recommendations, setRecommendations] = useState<Internship[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userSkills, setUserSkills] = useState<string[]>([]);
   
   const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
@@ -31,9 +30,7 @@ export default function Dashboard() {
     // Fetch profile for skills and roadmap
     fetch(`http://localhost:5000/api/users/${userId}/profile`)
       .then(res => res.json())
-      .then(data => {
-        if (data.skills) setUserSkills(data.skills);
-      });
+      .catch(() => {});
 
     // Fetch recommendations
     fetch(`http://localhost:5000/api/users/${userId}/recommendations`)
@@ -66,7 +63,7 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           Dashboard <span className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded-full">Active</span>
         </h1>
-        <p className="text-muted-foreground text-sm italic">"Smart choices for bright futures"</p>
+        <p className="text-muted-foreground text-sm italic">&ldquo;Smart choices for bright futures&rdquo;</p>
       </div>
 
       {/* Career Roadmap - Dynamic */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -43,7 +43,7 @@ export default function LoginPage() {
       } else {
         toast.error(data.error);
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to send OTP");
     } finally {
       setLoading(false);
@@ -57,9 +57,10 @@ export default function LoginPage() {
       navigator.credentials.get({
         otp: { transport: ['sms'] },
         signal: ac.signal
-      } as any).then((otpParams: any) => {
-        if (otpParams && otpParams.code) {
-          setOtp(otpParams.code);
+      } as unknown as CredentialRequestOptions).then((otpParams: unknown) => {
+        const params = otpParams as { code?: string } | null;
+        if (params && params.code) {
+          setOtp(params.code);
         }
       }).catch(err => {
         console.log("WebOTP not supported or failed:", err);
@@ -73,9 +74,9 @@ export default function LoginPage() {
     if (otp.length === 6) {
       handleVerifyOtp();
     }
-  }, [otp]);
+  }, [otp, handleVerifyOtp]);
 
-  const handleVerifyOtp = async (e?: React.FormEvent) => {
+  const handleVerifyOtp = useCallback(async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (otp.length !== 6) return;
 
@@ -103,12 +104,12 @@ export default function LoginPage() {
       } else {
         toast.error(data.error);
       }
-    } catch (err) {
+    } catch {
       toast.error("Verification failed");
     } finally {
       setLoading(false);
     }
-  };
+  }, [mobile, otp, router]);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 relative overflow-hidden">

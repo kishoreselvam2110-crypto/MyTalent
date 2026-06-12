@@ -62,7 +62,7 @@ export default function Tracker() {
         </div>
       ) : apps.length === 0 ? (
         <div className="text-center py-10 bg-card rounded-xl border">
-          <p className="text-muted-foreground">You haven't applied to any internships yet.</p>
+          <p className="text-muted-foreground">You haven&apos;t applied to any internships yet.</p>
           <button 
             onClick={() => router.push("/dashboard")}
             className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium"

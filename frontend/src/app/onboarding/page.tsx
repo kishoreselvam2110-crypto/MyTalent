@@ -54,7 +54,7 @@ export default function OnboardingPage() {
       } else {
         toast.error("Failed to save profile");
       }
-    } catch (err) {
+    } catch {
       toast.error("Error saving profile");
     } finally {
       setLoading(false);
@@ -84,7 +84,7 @@ export default function OnboardingPage() {
       } else {
         toast.error("Failed to upload resume");
       }
-    } catch (err) {
+    } catch {
       toast.error("Error uploading resume");
     } finally {
       setLoading(false);
@@ -158,7 +158,7 @@ export default function OnboardingPage() {
                 value={profile.skills}
                 onChange={e => setProfile({...profile, skills: e.target.value})}
               />
-              <p className="text-xs text-muted-foreground">Don't worry if you don't have many yet!</p>
+              <p className="text-xs text-muted-foreground">Don&apos;t worry if you don&apos;t have many yet!</p>
             </div>
 
             <div className="space-y-2">
@@ -196,7 +196,7 @@ export default function OnboardingPage() {
               </div>
               <h2 className="text-xl font-semibold mb-2">Upload Resume (Optional)</h2>
               <p className="text-sm text-muted-foreground mb-4">
-                We'll automatically read your skills to match you with better internships. PDF or DOCX format.
+                We&apos;ll automatically read your skills to match you with better internships. PDF or DOCX format.
               </p>
             </div>
 

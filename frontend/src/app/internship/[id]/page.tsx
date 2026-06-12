@@ -59,7 +59,7 @@ export default function InternshipDetails() {
       } else {
         toast.error(data.error || "Failed to apply");
       }
-    } catch (err) {
+    } catch {
       toast.error("An error occurred");
     } finally {
       setApplying(false);
