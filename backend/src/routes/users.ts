@@ -21,7 +21,7 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 // GET /api/users/:id/profile
 router.get('/:id/profile', async (req: Request, res: Response) => {
-  const user = await prisma.user.findUnique({ where: { id: req.params.id } });
+  const user = await prisma.user.findUnique({ where: { id: req.params.id as string } });
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
@@ -61,7 +61,7 @@ router.post('/:id/resume', upload.single('resume'), async (req: Request, res: Re
     const resumeUrl = `/uploads/${req.file.filename}`;
 
     const user = await prisma.user.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: {
         resumeUrl,
         skills: { push: extractedSkills },
@@ -81,7 +81,7 @@ router.post('/:id/resume', upload.single('resume'), async (req: Request, res: Re
 // GET /api/users/:id/recommendations
 router.get('/:id/recommendations', async (req: Request, res: Response) => {
   try {
-    const recs = await getRecommendations(req.params.id);
+    const recs = await getRecommendations(req.params.id as string);
     res.json(recs);
   } catch (err) {
     console.error(err);
@@ -92,7 +92,7 @@ router.get('/:id/recommendations', async (req: Request, res: Response) => {
 // GET /api/users/:id/applications
 router.get('/:id/applications', async (req: Request, res: Response) => {
   const apps = await prisma.application.findMany({
-    where: { userId: req.params.id },
+    where: { userId: req.params.id as string },
     include: { internship: true },
     orderBy: { appliedAt: 'desc' },
   });
@@ -103,12 +103,12 @@ router.get('/:id/applications', async (req: Request, res: Response) => {
 router.post('/:id/applications', async (req: Request, res: Response) => {
   const { internshipId } = req.body;
   const existing = await prisma.application.findFirst({
-    where: { userId: req.params.id, internshipId },
+    where: { userId: req.params.id as string, internshipId },
   });
   if (existing) return res.status(409).json({ error: 'Already applied' });
 
   const app = await prisma.application.create({
-    data: { userId: req.params.id, internshipId, status: 'applied' },
+    data: { userId: req.params.id as string, internshipId, status: 'applied' },
     include: { internship: true },
   });
   res.status(201).json(app);
@@ -118,7 +118,7 @@ router.post('/:id/applications', async (req: Request, res: Response) => {
 router.patch('/:id/applications/:appId', async (req: Request, res: Response) => {
   const { status } = req.body;
   const app = await prisma.application.update({
-    where: { id: req.params.appId },
+    where: { id: req.params.appId as string },
     data: { status },
     include: { internship: true },
   });

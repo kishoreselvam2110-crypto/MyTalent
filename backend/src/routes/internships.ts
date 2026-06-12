@@ -27,7 +27,7 @@ router.get('/', async (req: Request, res: Response) => {
 // GET /api/internships/:id
 router.get('/:id', async (req: Request, res: Response) => {
   const internship = await prisma.internship.findUnique({
-    where: { id: req.params.id },
+    where: { id: req.params.id as string },
   });
 
   if (!internship) return res.status(404).json({ error: 'Internship not found' });

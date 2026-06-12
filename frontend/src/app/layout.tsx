@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,12 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+
           {/* Top Bar Navigation */}
           <nav className="w-full h-16 border-b flex items-center justify-between px-4 sticky top-0 bg-background/80 backdrop-blur-md z-50">
             <div className="flex items-center gap-2">
@@ -50,7 +45,7 @@ export default function RootLayout({
           </main>
           
           <Toaster position="top-center" />
-        </ThemeProvider>
+
       </body>
     </html>
   );
